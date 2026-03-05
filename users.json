@@ -1,0 +1,23 @@
+[
+  {
+    "username": "Seema Shah",
+    "password": "seema123",
+    "role": "Patient",
+    "staff_id": "6",
+    "phone": "9324957234"
+  },
+  {
+    "username": "swati gupta",
+    "password": "swati123",
+    "role": "Nurse",
+    "staff_id": "7",
+    "phone": "987562314"
+  },
+  {
+    "username": "simran",
+    "password": "simran123",
+    "role": "Patient",
+    "staff_id": "5",
+    "phone": "9324957234"
+  }
+]
