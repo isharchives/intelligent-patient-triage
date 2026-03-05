@@ -107,5 +107,35 @@
     "override_by": null,
     "override_reason": null,
     "confidence": 100
+  },
+  {
+    "time": "2026-03-05 15:00",
+    "patient_id": 1,
+    "age": 19,
+    "symptom": "Fever",
+    "pain": 6,
+    "score": 110,
+    "original_priority": "High",
+    "final_priority": "High",
+    "override_by": null,
+    "override_reason": null,
+    "confidence": 100
+  },
+  {
+    "time": "2026-03-05 15:41",
+    "patient_id": 2,
+    "age": 20,
+    "symptom": "Chest Pain",
+    "heart_rate": 69,
+    "bp": 80,
+    "spo2": 92,
+    "temperature": 37.0,
+    "pain": 3,
+    "score": 45,
+    "original_priority": "Medium",
+    "final_priority": "Medium",
+    "override_by": null,
+    "override_reason": null,
+    "confidence": 100
   }
 ]
