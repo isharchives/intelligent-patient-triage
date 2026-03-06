@@ -35,18 +35,21 @@ def login_screen():
 
                 st.session_state.logged_in = True
                 st.session_state.role = u["role"]
-                st.session_state.user_id = u["staff_id"]
+
+                # ✅ FIXED HERE
+                st.session_state.staff_id = u["staff_id"]
+
                 st.session_state.username = u["username"]
                 st.session_state.phone = u["phone"]
 
                 st.success("Login successful")
 
-                # ⭐ If Patient → redirect to patient report page
+                # Patient login
                 if u["role"] == "Patient":
                     st.session_state.patient_id = u["staff_id"]
                     st.rerun()
 
-                # ⭐ Doctor/Nurse → open main app dashboard
+                # Doctor/Nurse login
                 else:
                     st.rerun()
 

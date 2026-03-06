@@ -1,41 +1,31 @@
 import streamlit as st
 import json
 from datetime import datetime
-
 from login import login_screen
 from register import register_user
 from risk_logic import calculate_risk
 from dashboard import show_dashboard
+from patient_view import patient_status
 from sms_alert import send_sms
-
 
 st.set_page_config(page_title="Patient Triage MVP")
 
 # ---------------- SESSION INIT ----------------
-
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
-
 if "role" not in st.session_state:
     st.session_state.role = None
-
 if "staff_id" not in st.session_state:
     st.session_state.staff_id = None
-
 if "triage_result" not in st.session_state:
     st.session_state.triage_result = None
-
 if "override_priority" not in st.session_state:
     st.session_state.override_priority = "No Override"
-
 if "override_reason" not in st.session_state:
     st.session_state.override_reason = ""
 
-
 # ---------------- LOGIN / REGISTER ----------------
-
 if not st.session_state.logged_in:
-
     option = st.radio(
         "Select Option",
         ["Login", "Register"]
@@ -48,13 +38,16 @@ if not st.session_state.logged_in:
 
     st.stop()
 
-
 # ---------------- SIDEBAR ----------------
-
 if st.session_state.role == "Patient":
-    page = "View Patient Status"
+
+    page = st.sidebar.radio(
+        "Navigation",
+        ["Patient Report"]
+    )
 
 else:
+
     page = st.sidebar.radio(
         "Navigation",
         ["Triage Assessment", "Dashboard"]
@@ -68,36 +61,33 @@ if st.sidebar.button("Logout"):
     st.session_state.triage_result = None
     st.rerun()
 
+# ---------------- PATIENT VIEW ----------------
+if st.session_state.role == "Patient":
+    patient_status()
+    st.stop()
 
+# ---------------- DASHBOARD ----------------
 if page == "Dashboard":
     show_dashboard()
     st.stop()
 
-
 # ---------------- TITLE ----------------
-
 st.title("🩺 Intelligent Patient Triage System")
 st.caption("Clinical decision-support tool (MVP)")
 
-
 # ---------------- LOAD LOGS ----------------
-
 try:
     with open("triage_log.json", "r") as f:
         logs = json.load(f)
 except:
     logs = []
 
-
 # ---------------- EXISTING PATIENT IDS ----------------
-
 existing_ids = sorted(
     list(set([log.get("patient_id") for log in logs if log.get("patient_id")]))
 )
 
-
 # ---------------- PATIENT TYPE ----------------
-
 st.subheader("Patient Selection")
 
 patient_type = st.radio(
@@ -108,9 +98,7 @@ patient_type = st.radio(
 selected_patient = None
 existing_data = None
 
-
 # ---------------- EXISTING PATIENT ----------------
-
 if patient_type == "Existing Patient":
 
     if not existing_ids:
@@ -127,6 +115,7 @@ if patient_type == "Existing Patient":
     ]
 
     if patient_records:
+
         existing_data = patient_records[-1]
 
         st.info(
@@ -135,9 +124,7 @@ if patient_type == "Existing Patient":
             f"Symptom {existing_data.get('symptom')}"
         )
 
-
 # ---------------- PATIENT DETAILS ----------------
-
 st.subheader("Patient Details")
 
 if patient_type == "New Patient":
@@ -183,9 +170,7 @@ else:
         value=existing_data.get("relative_phone", "")
     )
 
-
 # ---------------- BASIC MEDICAL INFO ----------------
-
 age = st.number_input(
     "Age",
     min_value=0,
@@ -211,9 +196,7 @@ symptom = st.selectbox(
     index=symptom_index
 )
 
-
 # ---------------- TRIAGE FORM ----------------
-
 st.subheader("Vital Signs")
 
 with st.form("triage_form"):
@@ -262,9 +245,7 @@ with st.form("triage_form"):
 
     submit = st.form_submit_button("Assess Priority")
 
-
 # ---------------- RUN TRIAGE ----------------
-
 if submit:
 
     data = {
@@ -284,9 +265,7 @@ if submit:
 
     st.session_state.triage_result = result
 
-
 # ---------------- DISPLAY TRIAGE RESULT ----------------
-
 if st.session_state.triage_result:
 
     result = st.session_state.triage_result
@@ -310,9 +289,6 @@ if st.session_state.triage_result:
 
     for r in result["reasons"]:
         st.write("•", r)
-
-
-    # ---------------- STAFF OVERRIDE ----------------
 
     final_priority = result["priority"]
 
@@ -339,7 +315,6 @@ if st.session_state.triage_result:
             st.session_state.override_priority = "No Override"
             st.info("High priority cannot be overridden.")
 
-
         if st.session_state.override_priority != "No Override":
 
             st.session_state.override_reason = st.text_area(
@@ -360,13 +335,10 @@ if st.session_state.triage_result:
 
         st.session_state.override_reason = ""
 
-
     # ---------------- SAVE TRIAGE ----------------
-
     if st.button("Save Triage Result"):
 
         log_entry = {
-
             "time": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "patient_id": p_id,
             "patient_name": patient_name,
@@ -410,9 +382,7 @@ Immediate hospital visit required.
 
         st.session_state.triage_result = None
 
-
 # ---------------- DISCLAIMER ----------------
-
 st.caption(
     "⚠️ This system supports clinical decisions and does not replace medical judgment."
 )

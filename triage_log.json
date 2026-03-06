@@ -463,5 +463,27 @@
     "final_priority": "High",
     "override_reason": "Sudden collapse",
     "confidence": 100
+  },
+  {
+    "time": "2026-03-06 23:40",
+    "patient_id": 37,
+    "patient_name": "kiran",
+    "patient_phone": "+919324402673",
+    "relative_name": "jivan",
+    "relative_phone": "+919324402673",
+    "age": 29,
+    "symptom": "Breathlessness",
+    "heart_rate": 90,
+    "bp": 169,
+    "spo2": 96,
+    "temperature": 37.0,
+    "pain_level": "Moderate",
+    "pain_days": 6,
+    "pain_trend": "Same",
+    "score": 45,
+    "original_priority": "Medium",
+    "final_priority": "High",
+    "override_reason": "Unconsious",
+    "confidence": 100
   }
 ]
