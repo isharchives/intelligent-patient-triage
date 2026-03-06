@@ -1,12 +1,20 @@
 import streamlit as st
 import json
+import pandas as pd
+from pathlib import Path
 
 def show_dashboard():
 
     st.title("📊 Emergency Department Dashboard")
 
+    log_file = Path("triage_log.json")
+
+    if not log_file.exists():
+        st.info("No triage data available yet.")
+        return
+
     try:
-        with open("triage_log.json", "r") as f:
+        with open(log_file, "r") as f:
             logs = json.load(f)
     except:
         logs = []
@@ -15,20 +23,28 @@ def show_dashboard():
         st.info("No triage data available yet.")
         return
 
+    df = pd.DataFrame(logs)
+
     # Metrics
-    high = sum(1 for l in logs if l["final_priority"] == "High")
-    medium = sum(1 for l in logs if l["final_priority"] == "Medium")
-    low = sum(1 for l in logs if l["final_priority"] == "Low")
+    high = (df["final_priority"] == "High").sum()
+    medium = (df["final_priority"] == "Medium").sum()
+    low = (df["final_priority"] == "Low").sum()
 
     st.subheader("Current Triage Overview")
 
     col1, col2, col3 = st.columns(3)
 
-    col1.metric("🔴 Emergency", high)
-    col2.metric("🟡 Urgent", medium)
-    col3.metric("🟢 Non‑Urgent", low)
+    col1.metric("🔴 Emergency", int(high))
+    col2.metric("🟡 Urgent", int(medium))
+    col3.metric("🟢 Non‑Urgent", int(low))
 
     st.divider()
 
     st.subheader("Recent Triage Cases")
-    st.table(logs[-10:])
+
+    df_recent = df.sort_values("time", ascending=False).head(10)
+
+    st.dataframe(df_recent, use_container_width=True)
+
+    if st.button("🔄 Refresh Dashboard"):
+        st.rerun()

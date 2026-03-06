@@ -19,5 +19,26 @@
     "role": "Patient",
     "staff_id": "5",
     "phone": "9324957234"
+  },
+  {
+    "username": "N12",
+    "password": "123",
+    "role": "Nurse",
+    "staff_id": "101",
+    "phone": "9324402673"
+  },
+  {
+    "username": "isha",
+    "password": "123",
+    "role": "Doctor",
+    "staff_id": "111",
+    "phone": "+919324402673"
+  },
+  {
+    "username": "sania",
+    "password": "123",
+    "role": "Patient",
+    "staff_id": "9",
+    "phone": "+919324402673"
   }
 ]
