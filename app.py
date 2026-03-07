@@ -50,7 +50,7 @@ else:
 
     page = st.sidebar.radio(
         "Navigation",
-        ["Triage Assessment", "Dashboard"]
+        ["Triage Assessment", "Dashboard", "Staff Override"]
     )
 
 st.sidebar.success(f"👤 {st.session_state.role}")
@@ -330,9 +330,10 @@ if st.session_state.triage_result:
                 )
 
                 st.write("Override Reason:", st.session_state.override_reason)
+            
 
     else:
-
+        st.session_state.override_priority=""
         st.session_state.override_reason = ""
 
     # ---------------- SAVE TRIAGE ----------------
@@ -356,7 +357,7 @@ if st.session_state.triage_result:
             "pain_trend": pain_trend,
             "score": result["score"],
             "original_priority": result["priority"],
-            "final_priority": final_priority,
+            "final_priority": st.session_state.override_priority,
             "override_reason": st.session_state.override_reason,
             "confidence": result["confidence"]
         }

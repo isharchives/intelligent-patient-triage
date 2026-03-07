@@ -8,7 +8,7 @@ def login_screen():
 
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
-    staff_id = st.text_input("Staff ID")
+    staff_id = st.text_input("Login ID")
     role = st.selectbox("Role", ["Doctor", "Nurse", "Patient"])
 
     if st.button("Login"):
